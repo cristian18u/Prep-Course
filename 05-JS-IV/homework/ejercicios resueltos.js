@@ -7,7 +7,14 @@ function crearGato (nombre, edad) {
   // Devuelve el objeto
   // Tu código:
 
-
+  var obj = {
+    nombre: nombre,
+    edad: edad,
+    meow: function meow () {
+      return 'Meow!'
+    }
+  }
+  return obj;
 }
 
 function agregarPropiedad (objeto, property) {
@@ -16,7 +23,17 @@ function agregarPropiedad (objeto, property) {
   // NOTA: El nombre de la propiedad no es "propiedad", el nombre es el valor del argumento llamado "property" (una cadena/string)
   // Tu código:
 
+  // var objeto = { 
+  //   x: 1, 
+  //   y: 2 
+  // }
 
+  // objeto = {"x": 1, "y": 2, "z": null}
+
+  objeto[property] = null;
+  // console.log('objeto', objeto)
+  // console.log('property', property)
+  return objeto;
 }
 
 function invocarMetodo (objeto, metodo) {
@@ -25,7 +42,7 @@ function invocarMetodo (objeto, metodo) {
   // Nada necesita ser devuelto ("returned")
   // Tu código:
 
-  
+  return objeto[metodo]();
 }
 
 function multiplicarNumeroDesconocidoPorCinco (objetoMisterioso) {
@@ -33,7 +50,7 @@ function multiplicarNumeroDesconocidoPorCinco (objetoMisterioso) {
   // Multiplica el numeroMisterioso por 5 y devuelve el producto
   // Tu código:
 
-
+  return objetoMisterioso.numeroMisterioso*5;
 }
 
 function eliminarPropiedad (objeto, unaPropiedad) {
@@ -42,15 +59,20 @@ function eliminarPropiedad (objeto, unaPropiedad) {
   // Devuelve el objeto
   // Tu código:
 
-  
+  delete objeto[unaPropiedad]
+  return objeto;
 }
 
 function nuevoUsuario (nombre, email, password) {
   // Crea un nuevo objeto con las propiedades coincidiendo con los argumentos que se pasan a la función
   // Devuelve el objeto
   // Tu código:
-
-
+  var objeto = {
+    nombre,
+    email,
+    password,
+  }
+  return objeto;
 }
 
 function tieneEmail (usuario) {
@@ -58,7 +80,10 @@ function tieneEmail (usuario) {
   // De lo contratio, devuelve "false"
   // Tu código:
 
-
+  if (usuario.email) return true
+  return false;
+  // return usuario.hasOwnProperty('email')
+  // return Object.prototype.hasOwnProperty.call(usuario, "email")
 }
 
 function tienePropiedad (objeto, propiedad) {
@@ -67,7 +92,8 @@ function tienePropiedad (objeto, propiedad) {
   // De lo contrario, devuelve "false"
   // Tu código:
 
-
+  // eslint-disable-next-line no-prototype-builtins
+  return objeto.hasOwnProperty(propiedad);
 }
 
 function verificarPassword (usuario, password) {
@@ -76,7 +102,8 @@ function verificarPassword (usuario, password) {
   // De lo contrario, devuelve "false"
   // Tu código:
 
-  
+  if (usuario.password === password) return true
+  return false;
 }
 
 function actualizarPassword (usuario, nuevaPassword) {
@@ -84,7 +111,13 @@ function actualizarPassword (usuario, nuevaPassword) {
   // Devuelve el objeto
   // Tu código:
 
- 
+  // console.log('usuario', usuario);
+  usuario.password = nuevaPassword;
+  return usuario;
+
+  // // eslint-disable-next-line no-unreachable
+  // usuario.nuevaPassword = nuevaPassword
+  // return usuario;
 }
 
 function agregarAmigo (usuario, nuevoAmigo) {
@@ -93,18 +126,8 @@ function agregarAmigo (usuario, nuevoAmigo) {
   // Devuelve el objeto "usuario"
   // Tu código:
 
-
-  // usuario[amigos]
-
-  // usuario= {
-  //   amigo: []
-  // }
-
-  usuario.amigos.push(nuevoAmigo)
-
-
+  usuario.amigos.push(nuevoAmigo);
   return usuario;
-
 }
 
 function pasarUsuarioAPremium (usuarios) {
@@ -114,12 +137,15 @@ function pasarUsuarioAPremium (usuarios) {
   // Devuelve el array de usuarios
   // Tu código:
 
-  // usuarios = [usuarios, usuarios, usuarios]
-  // usuario = [{esPremium: true}, {esPremium: null}]
+  // usuarios = [usuario, usuario, usuario, usuario]
 
+  // usuarios = [{esPremium: null}, {esPremium: null}, {esPremium: null}, {esPremium: null}]
 
+  // usuario {
+  //   esPremium: null
+  // }
   for (var i = 0; i < usuarios.length; i++) {
-    usuarios[i].esPremium = true;
+    usuarios[i].esPremium = true
   }
   return usuarios;
 }
@@ -132,19 +158,22 @@ function sumarLikesDeUsuario (usuario) {
   // Devuelve la suma
   // Tu código:
 
-  // usuario = {
-  //   posts: [post, post, post]
+  console.log('usuario', usuario)
+  // usuario.posts = [post, post, post, post]
+  //  post = {
+  //   likes: 5;
   // }
-  //  posts : [{likes: 9}, {likes: 3}, {likes: 4}]
 
-  // console.log('lo que llega', usuario);
+  // usuario.post = [{likes: 5}, {likes: 7}, {likes: 6}]
+
+  // usuario.posts
+
   var acumulador = 0;
 
   for (var i = 0; i < usuario.posts.length; i++) {
     acumulador = acumulador + usuario.posts[i].likes
-  console.log('acumulador', acumulador)
+    console.log('acumulador', acumulador);
   }
-
   return acumulador;
 }
 
@@ -158,21 +187,42 @@ function agregarMetodoCalculoDescuento (producto) {
   // producto.porcentajeDeDescuento -> 0.2 (o simplemente ".2")
   // producto.calcularPrecioDescuento() -> 20 - (20 * 0.2)
   // Tu código:
-  
-  // producto = {
 
+  // console.log('lo que llega', producto);
+
+  // calcularPrecioDescuento
+
+  // el this se hace relevante cuando usemos funciones constructoras y usemos metodos por aparte
+  // usando algo que se llama prototype
+
+  producto.calcularPrecioDescuento = function calcularPrecioDescuento () {
+    // console.log('this', this.precio)
+    console.log('producto', producto.precio)
+    var precioDescuento = this.precio - (this.precio * this.porcentajeDeDescuento)
+    return precioDescuento;
+  }
+  return producto;
+
+  // var usuario = {
+  //   nombre: 'cristian',
+  //   email: 'critian18u',
+  //   wed: {
+  //     likes: 7
+  //     calculoLikes: function calculoLikes () {
+  //       return 'tengo' + ' ' + wed.likes;
+  //       this.likes;
+  //     }
+  //   }
   // }
 
-  // producto { precio: 80, porcentajeDeDescuento: 0.1 }
-
-  // console.log('producto', producto)
-  producto.calcularPrecioDescuento = function () {
-    return this.precio - (this.precio * this.porcentajeDeDescuento)
-  }
-
-  return producto;
+  // function Usuario (usuario) {
+  //   nombre: 'cristian',
+  //   email: 'critian18u',
+  //   wed: {
+  //     likes: 7
+  //   } 
+  // }
 }
-
 
 // No modificar nada debajo de esta línea
 // --------------------------------
